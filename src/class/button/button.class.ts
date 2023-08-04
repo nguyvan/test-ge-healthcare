@@ -5,7 +5,7 @@ import { WatchI } from "../../interface/watch.interface";
 
 export class Button implements ButtonI{
 
-    onPress(time: TimeI) {
+    onPress(time?: TimeI, watch?: WatchI) {
         // abstract function
     }
 }

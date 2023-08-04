@@ -9,7 +9,7 @@ export interface TimeI {
     localType: LOCAL_TYPE,
     timeZone: string,
     timer: NodeJS.Timer;
-
+    isPassedTimezone: boolean;
     increaseHour: () => void,
     increaseMinute: () => void,
     changeFormat: (format: FORMAT) => void,
@@ -17,7 +17,7 @@ export interface TimeI {
     reset: () => void,
     display: () => string,
 
-    start: () => void,
+    start: (callback: () => void) => void,
     transformHourLocalToGlobal: () => number,
     setDate: (date: Date) => void
 } 
