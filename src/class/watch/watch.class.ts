@@ -28,6 +28,10 @@ export class Watch implements WatchI {
     public digits: Map<string, HTMLDivElement | HTMLButtonElement>;
     public point: PointI;
 
+    public timerAnimationRotate: NodeJS.Timer;
+    public timerAnimationRotateAroundSelf: NodeJS.Timer;
+    public initDeg: number;
+    public initScale: PointI;
 
     constructor(timezone: string, index: number) {
         this.buttonIncrease = new ButtonIncrease();
@@ -40,12 +44,13 @@ export class Watch implements WatchI {
         this.time = new Time(timezone);
         this.mode = MODE_DISPLAY.LIGHT;
         this.digits = new Map<string, HTMLDivElement>();
+        this.initDeg = 0;
+        this.initScale = new Point(1, 1);
         this.init();
     }
 
     run() {
         this.time.start(() => {
-            this.rotate(this.point.x + 50, this.point.y + 50, 10)
             this.update()
         });
     }
@@ -130,9 +135,25 @@ export class Watch implements WatchI {
         displayButton.innerHTML = this.time.format;
         displayButton.addEventListener('click', this.buttonDisplay.onPress.bind(this.buttonDisplay, this.time, this));
 
+        const scaleUpButton = document.createElement('button');
+        scaleUpButton.innerHTML = 'scale up';
+        scaleUpButton.addEventListener('click', this.scale.bind(this, 0.1, 0.1));
+
+        const scaleDownButton = document.createElement('button');
+        scaleDownButton.innerHTML = 'scale down';
+        scaleDownButton.addEventListener('click', this.scale.bind(this, -0.1, -0.1));
+
         const resetButton = document.createElement('button');
         resetButton.innerHTML = 'reset';
         resetButton.addEventListener('click', this.buttonReset.onPress.bind(this.buttonReset, this.time, this));
+
+        const rotateAroundSelfButton = document.createElement('button');
+        rotateAroundSelfButton.innerHTML = 'rotate self';
+        rotateAroundSelfButton.addEventListener('click', this.startRotateAroundSelf.bind(this));
+
+        const rotateAroundButton = document.createElement('button');
+        rotateAroundButton.innerHTML = 'rotate around';
+        rotateAroundButton.addEventListener('click', this.startRotate.bind(this));
 
         this.digits.set('lightButton', lightButton);
         this.digits.set('displayButton', displayButton);
@@ -141,6 +162,10 @@ export class Watch implements WatchI {
         buttonContainerElement.append(modeButton);
         buttonContainerElement.append(lightButton);
         buttonContainerElement.append(displayButton);
+        buttonContainerElement.append(scaleUpButton);
+        buttonContainerElement.append(scaleDownButton);
+        buttonContainerElement.append(rotateAroundSelfButton);
+        buttonContainerElement.append(rotateAroundButton);
         buttonContainerElement.append(resetButton);
 
         watchElement.append(buttonContainerElement)
@@ -169,10 +194,6 @@ export class Watch implements WatchI {
         this.digits.get('m2').classList.add(DIGIT_TO_NAME[parseInt(minute[1])]);
         this.digits.get('s1').classList.add(DIGIT_TO_NAME[parseInt(second[0])]);
         this.digits.get('s2').classList.add(DIGIT_TO_NAME[parseInt(second[1])]);
-
-        const element = document.getElementById(`watch-${this.index}`)
-        const width: number = element.offsetWidth;
-        const height: number = element.offsetHeight;
 
     }
 
@@ -206,14 +227,22 @@ export class Watch implements WatchI {
 
     getCoordinate(): PointI {
         const element = document.getElementById(`watch-${this.index}`)
-        const offsetLeft: number = element.offsetLeft;
-        const offsetTop: number = element.offsetTop;
-        const width: number = element.offsetWidth;
-        const height: number = element.offsetHeight;
-        const x = offsetLeft + width / 2;
-        const y = offsetTop + height / 2;
+        const rect = element.getBoundingClientRect()
+        const x: number = rect.x;
+        const y: number = rect.y;
         this.point = new Point(x, y)
+
         return this.point
+    }
+
+    // for rotation around a point
+
+    initAnimation() {
+        const element = document.getElementById(`watch-${this.index}`);
+        element.style.position = 'absolute',
+        element.style.top = '0px';
+        element.style.left = '0px';
+        this.getCoordinate();
     }
 
     rotate(x: number, y: number, rad: number) {
@@ -228,6 +257,53 @@ export class Watch implements WatchI {
         const newY = newPositionVector[1] + y;
 
         this.point = new Point(newX, newY);
+
+        const element = document.getElementById(`watch-${this.index}`);
+        element.style.left = `${this.point.x}px`;
+        element.style.top = `${this.point.y}px`;
+    }
+
+    rotateAroundSelf() {
+        this.initDeg++;
+        const element = document.getElementById(`watch-${this.index}`);
+        element.style.transform = `rotate(${this.initDeg%360}deg)`
+    }
+
+    scale(x: number, y: number) {
+        this.initScale = this.initScale.add(new Point(x, y));
         
+        const element = document.getElementById(`watch-${this.index}`);
+        element.style.transform = `scale(${this.initScale.x}, ${this.initScale.y})`;
+    }
+
+    startRotateAroundSelf() {
+        const that = this;
+        this.timerAnimationRotateAroundSelf = setInterval(() => {
+            that.rotateAroundSelf();
+        }, 500)
+    }
+
+    startRotate() {
+        const that = this;
+        const element = document.getElementById(`watch-${this.index}`)
+        const width = element.getBoundingClientRect().width;
+        const height = element.getBoundingClientRect().height;
+        const x = that.point.x + width/2;
+        const y = that.point.y + height/2;
+        this.timerAnimationRotate = setInterval(() => {
+            that.rotate(x, y, 0.5);
+        }, 500)
+    }
+
+    resetAnimation() {
+        clearInterval(this.timerAnimationRotate);
+        clearInterval(this.timerAnimationRotateAroundSelf);
+        const element = document.getElementById(`watch-${this.index}`);
+        element.style.position = 'relative',
+        element.style.top = '0px';
+        element.style.left = '0px';
+        element.style.rotate = '';
+        element.style.transform = 'none';
+        this.getCoordinate();
     }
 }

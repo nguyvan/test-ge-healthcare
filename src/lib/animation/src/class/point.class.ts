@@ -12,8 +12,15 @@ export class Point implements PointI {
 
     subtract(point: PointI): PointI {
         const p = new Point(0, 0);
-        p.x = this.x - p.x;
-        p.y = this.y - p.y;
+        p.x = this.x - point.x;
+        p.y = this.y - point.y;
         return p
+    }
+
+    add(point: PointI): PointI {
+        const p = new Point(0, 0);
+        p.x = this.x + point.x;
+        p.y = this.y + point.y;
+        return p;
     }
 }

@@ -19,12 +19,13 @@
     flex-wrap: wrap;
     flex-direction: row;
     gap: 20px 20px;
-    width: 70%;
+    width: 100%;
     align-self: center;
 }
 
 .watch {
     display: flex;
+	width: 45%;
     padding: 40px;
     padding-bottom: 20px;
 	position: relative;
@@ -337,6 +338,7 @@
 }
 
 .button-container button {
+	width: 24%;
     background-color: #0f1620;
     display: flex;
     text-align: center;

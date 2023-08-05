@@ -10,6 +10,7 @@ export class ButtonReset extends Button {
         watch.reset();
         time.mode = MODE.DISABLED;
         watch.unBlink();
+        watch.resetAnimation();
     }
 
 }

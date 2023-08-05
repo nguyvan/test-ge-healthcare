@@ -16,6 +16,12 @@ export interface WatchI {
     mode: MODE_DISPLAY;
     point?: PointI;
 
+    timerAnimationRotate: NodeJS.Timer;
+    timerAnimationRotateAroundSelf: NodeJS.Timer;
+
+    initDeg: number;
+    initScale: PointI;
+
     run: () => void;
     init: () => void;
     update: () => void;
@@ -24,4 +30,11 @@ export interface WatchI {
     unBlink: () => void;
     reset: () => void;
     getCoordinate: () => PointI;
+
+    initAnimation: () => void;
+    rotate: (x: number, y: number, rad: number) => void;
+    rotateAroundSelf: (rad: number) => void;
+    resetAnimation: () => void;
+
+    startRotateAroundSelf: () => void;
 }
