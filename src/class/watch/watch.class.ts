@@ -291,7 +291,7 @@ export class Watch implements WatchI {
         const x = that.point.x + width/2;
         const y = that.point.y + height/2;
         this.timerAnimationRotate = setInterval(() => {
-            that.rotate(x, y, 0.5);
+            that.rotate(x, y, 0.05);
         }, 500)
     }
 
