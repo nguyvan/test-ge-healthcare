@@ -6,7 +6,7 @@ export enum MODE {
 
 export enum FORMAT {
     GLOBAL = '24H',
-    LOCAL = 'AM_PM'
+    LOCAL = 'A/P'
 }
 
 export enum LOCAL_TYPE {

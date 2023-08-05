@@ -35,16 +35,16 @@ export class Time implements TimeI {
         else {
             this.hour++;
             if (this.localType === LOCAL_TYPE.AM) {
-                if (this.hour >= 12) {
+                if (this.hour === 12) {
                     this.localType = LOCAL_TYPE.PM;
-                    this.hour -= this.hour === 12? 0: 12
                 }
+                this.hour = this.hour === 12? 12: this.hour % 12;
             }
             else {
-                if (this.hour >= 12) {
+                if (this.hour === 12) {
                     this.localType = LOCAL_TYPE.AM;
-                    this.hour -= this.hour === 12? 0: 12
                 }
+                this.hour = this.hour === 12? 12: this.hour % 12;
             }
         }
     }
@@ -110,14 +110,11 @@ export class Time implements TimeI {
 
     start(callback: () => void): void {
         const that: Time = this;
-        const currentHour = this.hour;
-        const currentMinute = this.minute;
         this.timer = setInterval(() => {
             let now = new Date()
-            let hour: number = that.mode === MODE.EDIT_HOUR? currentHour: that.transformHourLocalToGlobal();
-            let minute: number = that.mode === MODE.EDIT_MINUTE? currentMinute: this.minute;
+            let hour: number = that.transformHourLocalToGlobal();
+            let minute: number = this.minute;
             let second: number = this.second;
-            
             now.setHours(hour, minute, second)
             now = new Date(now.getTime() + 1000)
             this.setDate(now)

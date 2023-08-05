@@ -12,7 +12,7 @@ export interface TimeI {
     isPassedTimezone: boolean;
     increaseHour: () => void,
     increaseMinute: () => void,
-    changeFormat: (format: FORMAT) => void,
+    changeFormat: () => void,
 
     reset: () => void,
     display: () => string,
