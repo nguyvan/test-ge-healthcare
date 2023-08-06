@@ -300,15 +300,33 @@
 
 
 .blink {
-    animation: blink-animation 1s steps(5, start) infinite;
     -webkit-animation: blink-animation 1s steps(5, start) infinite;
+	-moz-animation: blink-animation 1s steps(5, start) infinite;
+    -o-animation: blink-animation 1s steps(5, start) infinite;
+	-ms-animation: blink-animation 1s steps(5, start) infinite;
+	animation: blink-animation 1s steps(5, start) infinite;
 }
 @keyframes blink-animation {
     to {
         visibility: hidden;
     }
+}
+@-webkit-keyframes blink-animation {
+    to {
+        visibility: hidden;
     }
-    @-webkit-keyframes blink-animation {
+}
+@-moz-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+@-o-keyframes blink-animation {
+    to {
+        visibility: hidden;
+    }
+}
+@-ms-keyframes blink-animation {
     to {
         visibility: hidden;
     }
