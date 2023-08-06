@@ -300,36 +300,51 @@
 
 
 .blink {
-    -webkit-animation: blink-animation 1s steps(5, start) infinite;
-	-moz-animation: blink-animation 1s steps(5, start) infinite;
-    -o-animation: blink-animation 1s steps(5, start) infinite;
-	-ms-animation: blink-animation 1s steps(5, start) infinite;
-	animation: blink-animation 1s steps(5, start) infinite;
+    -webkit-animation: animation 1s infinite;
+	-moz-animation: animation 1s infinite;
+    -o-animation: animation 1s infinite;
+	-ms-animation: animation 1s infinite;
+	animation: animation 1s infinite;
 }
-@keyframes blink-animation {
-    to {
-        visibility: hidden;
+@keyframes animation {
+    0% {
+       	opacity: 1; 
     }
+	100% {
+		opacity: 0;
+	}
 }
-@-webkit-keyframes blink-animation {
-    to {
-        visibility: hidden;
-    }
+@-webkit-keyframes animation {
+    0% {
+		opacity: 1; 
+	}
+	100% {
+		opacity: 0;
+	}
 }
-@-moz-keyframes blink-animation {
-    to {
-        visibility: hidden;
-    }
+@-moz-keyframes animation {
+    0% {
+		opacity: 1; 
+	}
+	100% {
+		opacity: 0;
+	}
 }
-@-o-keyframes blink-animation {
-    to {
-        visibility: hidden;
-    }
+@-o-keyframes animation {
+    0% {
+		opacity: 1; 
+	}
+	100% {
+		opacity: 0;
+	}
 }
-@-ms-keyframes blink-animation {
-    to {
-        visibility: hidden;
-    }
+@-ms-keyframes animation {
+    0% {
+		opacity: 1; 
+	}
+	100% {
+		opacity: 0;
+	}
 }
 
 /*-------------------------
