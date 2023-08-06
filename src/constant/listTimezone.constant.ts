@@ -1,5 +1,7 @@
 
-
+/**
+ * List of available timezone
+ */
 export const listTimeZone = [
     '',
     'Europe/Andorra',

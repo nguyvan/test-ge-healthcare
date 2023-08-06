@@ -4,8 +4,8 @@ import { WatchI } from "../../interface/watch.interface";
 import { Button } from "./button.class";
 
 export class ButtonReset extends Button {
-
-    onPress(time: TimeI, watch: WatchI): void {
+    /** @override */
+    public onPress(time: TimeI, watch: WatchI): void {
         time.reset();
         watch.reset();
         time.mode = MODE.DISABLED;

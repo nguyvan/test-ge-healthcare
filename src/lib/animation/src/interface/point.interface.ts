@@ -1,8 +1,9 @@
+import { VectorI } from "./vector.interface";
 
 export interface PointI {
     x: number;
     y: number;
 
-    subtract: (point: PointI) => PointI;
-    add: (point: PointI) => PointI
+    subtract: (point: PointI) => VectorI;
+    add: (point: PointI) => VectorI;
 }

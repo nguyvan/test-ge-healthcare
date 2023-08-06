@@ -49,13 +49,19 @@ export class Watch implements WatchI {
         this.init();
     }
 
-    run() {
+    /**
+     * Run the watch
+     */
+    public run() {
         this.time.start(() => {
             this.update()
         });
     }
 
-    init() {
+    /**
+     * Init all elements of the watch
+     */
+    public init() {
         const parent = document.getElementById('list-watches');
 
         const watchElement = document.createElement('div');
@@ -175,7 +181,10 @@ export class Watch implements WatchI {
         this.getCoordinate()
     }
 
-    update() {
+    /**
+     * Update all attributes of the watch
+     */
+    public update() {
         const hour: string = this.time.hour < 10? `0${this.time.hour}`: this.time.hour.toString();
         const minute: string = this.time.minute < 10? `0${this.time.minute}`: this.time.minute.toString();
         const second: string = this.time.second < 10? `0${this.time.second}`: this.time.second.toString();
@@ -197,35 +206,35 @@ export class Watch implements WatchI {
 
     }
 
-    blinkHour() {
+    public blinkHour() {
         this.digits.get('h1').classList.add('blink');
         this.digits.get('h2').classList.add('blink');
         this.digits.get('m1').classList.remove('blink');
         this.digits.get('m2').classList.remove('blink');
     };
 
-    blinkMinute() {
+    public blinkMinute() {
         this.digits.get('m1').classList.add('blink');
         this.digits.get('m2').classList.add('blink');
         this.digits.get('h1').classList.remove('blink');
         this.digits.get('h2').classList.remove('blink');
     };
 
-    unBlink() {
+    public unBlink() {
         this.digits.get('m1').classList.remove('blink');
         this.digits.get('m2').classList.remove('blink');
         this.digits.get('h1').classList.remove('blink');
         this.digits.get('h2').classList.remove('blink');
     };
 
-    reset() {
+    public reset() {
         this.mode = MODE_DISPLAY.LIGHT;
         const element = document.getElementById(`watch-${this.index}`);
         element.className = `watch light`;
         this.digits.get('displayButton').innerHTML = this.time.format;
     }
 
-    getCoordinate(): PointI {
+    public getCoordinate(): PointI {
         const element = document.getElementById(`watch-${this.index}`)
         const rect = element.getBoundingClientRect()
         const x: number = rect.x;
@@ -237,7 +246,7 @@ export class Watch implements WatchI {
 
     // for rotation around a point
 
-    initAnimation() {
+    public initAnimation() {
         const element = document.getElementById(`watch-${this.index}`);
         element.style.position = 'absolute',
         element.style.top = '0px';
@@ -245,11 +254,11 @@ export class Watch implements WatchI {
         this.getCoordinate();
     }
 
-    rotate(x: number, y: number, rad: number) {
+    public rotate(x: number, y: number, rad: number) {
         const centerPoint = new Point(x, y);
         const vectorPoint = this.point.subtract(centerPoint);
         const animation = new Animation()
-        const newPositionMatrix = animation.rotate(vectorPoint, rad);
+        const newPositionMatrix = animation.rotate(vectorPoint.toPoint(), rad);
 
         const newPositionVector = newPositionMatrix.coord.map((value: number[]) => value[0]);
         
@@ -263,27 +272,27 @@ export class Watch implements WatchI {
         element.style.top = `${this.point.y}px`;
     }
 
-    rotateAroundSelf() {
+    public rotateAroundSelf() {
         this.initDeg++;
         const element = document.getElementById(`watch-${this.index}`);
         element.style.transform = `rotate(${this.initDeg%360}deg)`
     }
 
-    scale(x: number, y: number) {
-        this.initScale = this.initScale.add(new Point(x, y));
+    public scale(x: number, y: number) {
+        this.initScale = this.initScale.add(new Point(x, y)).toPoint();
         
         const element = document.getElementById(`watch-${this.index}`);
         element.style.transform = `scale(${this.initScale.x}, ${this.initScale.y})`;
     }
 
-    startRotateAroundSelf() {
+    public startRotateAroundSelf() {
         const that = this;
         this.timerAnimationRotateAroundSelf = setInterval(() => {
             that.rotateAroundSelf();
         }, 500)
     }
 
-    startRotate() {
+    public startRotate() {
         const that = this;
         const element = document.getElementById(`watch-${this.index}`)
         const width = element.getBoundingClientRect().width;
@@ -295,7 +304,7 @@ export class Watch implements WatchI {
         }, 500)
     }
 
-    resetAnimation() {
+    public resetAnimation() {
         clearInterval(this.timerAnimationRotate);
         clearInterval(this.timerAnimationRotateAroundSelf);
         const element = document.getElementById(`watch-${this.index}`);

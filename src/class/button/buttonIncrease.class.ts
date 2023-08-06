@@ -5,8 +5,8 @@ import { Button } from "./button.class";
 
 
 export class ButtonIncrease extends Button {
-
-    onPress(time: TimeI, watch: WatchI) {
+    /** @override */
+    public onPress(time: TimeI, watch: WatchI) {
         switch (time.mode) {
             case MODE.DISABLED:
                 break;

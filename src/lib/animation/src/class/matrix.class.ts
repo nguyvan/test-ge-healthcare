@@ -17,15 +17,35 @@ export class Matrix implements MatrixI {
         }
     }
 
-    at(row: number, col: number): number {
+    /**
+     * Returns the coordinate value at a defined position
+     * @param row - Index of row
+     * @param col - Index of column
+     * @returns The position value at a defined point
+     */
+    public at(row: number, col: number): number {
         return this.coord[row][col];
     }
 
-    reset(): void {
+    /**
+     * Reset the matrix to zero
+     */
+    public reset(): void {
         this.coord = this.coord.map((row) => row.map(() => 0));
     }
 
-    toRotationMatrix(rad: number, axes1: number, axes2: number): MatrixI {
+    /**
+     * Returns the rotation matrix from rotation angle, 2 affected axes
+     * @param rad - Rotation angle (rad)
+     * @param axes1 - Affected axe 1
+     * @param axes2 - Affected axe 2
+     * @returns The rotation matrix
+     * @example toRotationMatrix(0.5, 0, 1) will returns a rotation matrix around axe Z with 0.5rad. So 0 and 1 are indexes of axe X and axe Y.
+     * Axe x = index 0
+     * Axe y = index 1
+     * Axe z = index 2
+     */
+    public toRotationMatrix(rad: number, axes1: number, axes2: number): MatrixI {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.columns; j++) {
                 if (i === axes1 && j === axes1) {
@@ -45,7 +65,12 @@ export class Matrix implements MatrixI {
         return this;
     };
 
-    toScaleMatrix(vector: VectorI): MatrixI {
+    /**
+     * Transform a vector to scale matrix
+     * @param vector Vector to be transformed
+     * @returns Scale matrix
+     */
+    public toScaleMatrix(vector: VectorI): MatrixI {
         const array = vector.toArray();
         const size: number = array.length;
         let matrix: MatrixI = new Matrix(size, size);
@@ -64,7 +89,12 @@ export class Matrix implements MatrixI {
         
     };
 
-    fromVectorToMatrix(vector: VectorI): MatrixI {
+    /**
+     * Transform a vector to a matrix
+     * @param vector Vector to be transformed
+     * @returns Matrix
+     */
+    public fromVectorToMatrix(vector: VectorI): MatrixI {
         const array: number[] = vector.toArray();
         const size: number = array.length;
         let matrix: MatrixI = new Matrix(size, 1)
@@ -75,7 +105,12 @@ export class Matrix implements MatrixI {
         return matrix;
     };
 
-    fromVectorToTranslationMatrix(vector: VectorI): MatrixI {
+    /**
+     * Transform a vector to a translation matrix
+     * @param vector - Vector to be transformed
+     * @returns Translation matrix
+     */
+    public fromVectorToTranslationMatrix(vector: VectorI): MatrixI {
         const array: number[] = vector.toArray();
         const size: number = array.length;
         let matrix: MatrixI = new Matrix(size, size);
@@ -96,7 +131,12 @@ export class Matrix implements MatrixI {
         return matrix;
     }
 
-    equals(mat: Matrix): boolean {
+    /**
+     * Compare to the matrix in parameter
+     * @param mat - Matrix to be compared
+     * @returns True if these 2 matrix are equals
+     */
+    public equals(mat: Matrix): boolean {
         // Reduce on rows -> reduce on columns -> if a value != then false!
         return (this.rows === mat.rows && this.columns === mat.columns)
             && this.coord.reduce(// Rows
@@ -105,7 +145,11 @@ export class Matrix implements MatrixI {
                 , true);
     }
 
-    setAsIdentity(): MatrixI {
+    /**
+     * Transform to an identity matrix
+     * @returns The identity matrix
+     */
+    public setAsIdentity(): MatrixI {
         if (this.rows !== this.columns) throw new Error("Dimension error! The matrix isn't squared!");
         this.coord.forEach((row, i) => {
             row.forEach((c, j) => {
@@ -115,13 +159,21 @@ export class Matrix implements MatrixI {
         return this;
     }
 
-    identity(dimension: number): MatrixI {
+    /**
+     * Transform to an identity matrix with a defined dimension
+     * @param dimension - Dimension of the identity matrix returned
+     * @returns The identity matrix
+     */
+    public identity(dimension: number): MatrixI {
         if (dimension < 1) throw Error('Dimension error! Matrix dimension must be positive.');
         return new Matrix(dimension, dimension).setAsIdentity();
     }
 
-
-    determinant(): number {
+    /**
+     * Calculate the value of determinant of matrix
+     * @returns The determinant of matrix
+     */
+    public determinant(): number {
         if (this.rows !== this.columns) throw new Error("Dimension error! The matrix isn't squared!");
         if (this.rows === this.columns && this.columns === 1) { return this.coord[0][0]; }
 
@@ -139,26 +191,49 @@ export class Matrix implements MatrixI {
         return det;
     }
 
-    addAColumn(): MatrixI {
+    /**
+     * Add a new column to current matrix
+     * @returns The new matrix with a new column
+     */
+    public addAColumn(): MatrixI {
         return new Matrix(this.rows, this.columns + 1, this.coord);
     }
 
-    addARow(): MatrixI {
+    /**
+     * Add a new row to current matrix
+     * @returns The new matrix with a new row
+     */
+    public addARow(): MatrixI {
         return new Matrix(this.rows + 1, this.columns, this.coord);
     }
 
-    getCofactor(row: number, col: number): MatrixI {
+    /**
+     * Get the cofactor matrix
+     * @link https://www.cuemath.com/algebra/cofactor-matrix/
+     * @param row - Row index
+     * @param col - Column index
+     * @returns The cofactor matrix
+     */
+    public getCofactor(row: number, col: number): MatrixI {
         return new Matrix(this.rows - 1, this.columns - 1, this.coord
             .filter((v, i) => i !== row) // Remove the unnecessary row
             .map((c) => c.filter((v, i) => i !== col)));
     }
 
-    transpose(): MatrixI {
+    /**
+     * Transpose a matrix
+     * @returns The transpose matrix
+     */
+    public transpose(): MatrixI {
         return new Matrix(this.columns, this.rows, new Array<number[]>(this.columns).fill([])
             .map((row, i) => new Array<number>(this.rows).fill(0).map((c, j) => this.at(j, i))));
     }
 
-    inverse() {
+    /**
+     * Calculate the inverse matrix
+     * @returns The inverse matrix
+     */
+    public inverse() {
         if (this.rows !== this.columns) throw new Error("Dimension error! The matrix isn't squared!");
         const det = this.determinant();
         if (det === 0) throw new Error("Determinant is 0, can't compute inverse.");
@@ -176,7 +251,12 @@ export class Matrix implements MatrixI {
             this.coord.map((row, i) => row.map((val, j) => transposedCofactor.at(i, j) / det)));
     };
 
-    multiple(mat: MatrixI): MatrixI {
+    /**
+     * Multiple with the matrix in parameter
+     * @param mat - Matrix to be multipled with
+     * @returns The result of multiple matrix calculation
+     */
+    public multiple(mat: MatrixI): MatrixI {
         if (this.columns !== mat.rows) throw new Error("Dimension error! The operand matrix must have the same number of rows as 'this' matrix columns!");
         const resMatrix = new Matrix(this.rows, mat.columns);
         resMatrix.coord = resMatrix.coord.map((row, i) => {

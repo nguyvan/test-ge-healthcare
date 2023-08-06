@@ -5,8 +5,8 @@ import { Button } from "./button.class";
 
 
 export class ButtonLight extends Button {
-
-    onPress(time: TimeI, watch: WatchI) {
+    /** @override */
+    public onPress(time: TimeI, watch: WatchI) {
         const element = document.getElementById(`watch-${watch.index}`);
         if (watch.mode === MODE_DISPLAY.LIGHT) {
             element.className = `watch dark`;

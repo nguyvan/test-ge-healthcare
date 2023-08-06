@@ -25,7 +25,11 @@ export class Time implements TimeI {
         this.localType = this.format === FORMAT.GLOBAL? (this.hour >= 12? LOCAL_TYPE.PM: LOCAL_TYPE.AM): LOCAL_TYPE.PM 
     }
 
-    increaseHour() {
+    /**
+     * Increase hour based on current time format (12h/24h)
+     * Used to set custom time for the watch
+     */
+    public increaseHour(): void {
         if (this.format === FORMAT.GLOBAL) {
             this.hour++;
             if (this.hour >= 24) {
@@ -49,14 +53,21 @@ export class Time implements TimeI {
         }
     }
 
-    increaseMinute() {
+    /**
+     * Increase minute
+     * Used to set custom time for the watch
+     */
+    public increaseMinute() {
         this.minute++;
         if (this.minute >= 60) {
             this.minute = 0;
         }
     }
 
-    changeFormat() {
+    /**
+     * Change time format of the watch : 24H <-> 12H
+     */
+    public changeFormat() {
         switch (this.format) {
             case FORMAT.GLOBAL:
                 let now = new Date();
@@ -83,7 +94,12 @@ export class Time implements TimeI {
         }
     };
 
-    transformHourLocalToGlobal() {
+    /**
+     * Returns the time of watch after changing time format
+     * 
+     * @returns The current hour of the watch after changing time format
+     */
+    public transformHourLocalToGlobal(): number {
         if (this.format === FORMAT.LOCAL) {
             if (this.localType === LOCAL_TYPE.AM) {
                 return this.hour === 12 ? 0: this.hour;
@@ -97,7 +113,12 @@ export class Time implements TimeI {
         }
     }
 
-    setDate(date: Date) {
+    /**
+     * Update the date for the watch
+     * 
+     * @param date - New date to update
+     */
+    public setDate(date: Date): void {
         const nowStr: string = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: this.format === FORMAT.LOCAL });
         const [hour, minute, second]: number[] = nowStr.split(':').map((value) => parseInt(value));
         this.hour = hour;
@@ -108,7 +129,12 @@ export class Time implements TimeI {
         }
     }
 
-    start(callback: () => void): void {
+    /**
+     * Start the timer
+     * Update time of the watch each second
+     * @param callback - Function to call in the interval
+     */
+    public start(callback: () => void): void {
         const that: Time = this;
         this.timer = setInterval(() => {
             let now = new Date()
@@ -122,7 +148,10 @@ export class Time implements TimeI {
         }, 1000)
     };
 
-    reset(): void {
+    /**
+     * Reset time of the watch
+     */
+    public reset(): void {
         const now = new Date();
         const nowStr: string = now.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: this.format === FORMAT.LOCAL, timeZone: this.timeZone });
         const [hour, minute, second]: number[] = nowStr.split(':').map((value) => parseInt(value));
@@ -132,8 +161,12 @@ export class Time implements TimeI {
         this.format = FORMAT.GLOBAL;
     }
 
-    display(): string {
-
+    /**
+     * Returns time as type string for displaying
+     *
+     * @returns the display string of time
+     */
+    public display(): string {
         const hour: string = this.hour < 10? `0${this.hour}`: this.hour.toString();
         const minute: string = this.minute < 10? `0${this.minute}`: this.minute.toString();
         const second: string = this.second < 10? `0${this.second}`: this.second.toString();

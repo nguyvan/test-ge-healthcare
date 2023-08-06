@@ -5,9 +5,13 @@ import { PointI } from "./src/interface/point.interface";
 
 
 export class Animation {
-
-
-    translate(start: PointI, moving: PointI): MatrixI {
+    /**
+     * Translate the object
+     * @param start - Start position
+     * @param moving - Distance of translation (in coordinates)
+     * @returns New position of object after translation as type Matrix
+     */
+    public translate(start: PointI, moving: PointI): MatrixI {
         const startVector = new Vector(start);
         const startSize = startVector.toArray().length;
         const startMatrix_ = new Matrix(startSize, startSize);
@@ -21,7 +25,13 @@ export class Animation {
         return movingMatrix.multiple(startMatrix);
     }
 
-    rotate(start: PointI, rad: number): MatrixI {
+    /**
+     * Rotate the object
+     * @param start - Start position
+     * @param rad - Angle of rotation
+     * @returns New position of object after rotation as type Matrix
+     */
+    public rotate(start: PointI, rad: number): MatrixI {
         const startVector = new Vector(start);
         const startSize = startVector.toArray().length;
         const startMatrix_ = new Matrix(startSize, startSize);
@@ -33,7 +43,13 @@ export class Animation {
         return rotationMatrix.multiple(startMatrix);
     }
 
-    scale(start: PointI, scale: PointI): MatrixI {
+    /**
+     * Scale the dimension of the object
+     * @param start - Start position
+     * @param scale - Factor of scaling
+     * @returns New coordinates of object after scaling as type Matrix
+     */
+    public scale(start: PointI, scale: PointI): MatrixI {
         const startVector = new Vector(start);
         const startSize = startVector.toArray().length;
         const startMatrix_ = new Matrix(startSize, startSize);

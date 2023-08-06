@@ -20,7 +20,10 @@ export class WatchManager implements WatchManagerI {
         this.init();
     }
 
-    addWatch(){
+    /**
+     * Add a new watch with a selected timezone
+     */
+    public addWatch(){
         if (this.selectedTimeZone) {
             const watch = new Watch(this.selectedTimeZone, this.nbWatch);
             watch.run();
@@ -29,14 +32,20 @@ export class WatchManager implements WatchManagerI {
         }   
     }
 
-    select() {
+    /**
+     * Select a timezone in the list
+     */
+    public select() {
         const selectedBox: HTMLSelectElement = document.getElementById("selector-timezone") as HTMLSelectElement;
         const index = selectedBox.selectedIndex;
         const selectedValue = selectedBox.options[index].value;
         this.selectedTimeZone = selectedValue;
     }
 
-    init() {
+    /**
+     * Init all elements of the watch
+     */
+    public init() {
         const listWatchesElement = document.createElement('div');
         listWatchesElement.id = 'list-watches';
 
