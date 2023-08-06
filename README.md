@@ -26,3 +26,10 @@ npm install
 npm run build
 npm run start
 ```
+
+## Run unit test
+```javascript
+npm run test
+```
+
+
