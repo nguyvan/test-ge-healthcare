@@ -1,6 +1,8 @@
 # GE-Healthcare Test
 Typescript Watch with animations
 
+Production site is deployed [here](https://42ab47f8.test-ge-healthcare.pages.dev)
+
 ## Diagram of project
 The diagram of project is as below, note that it is included all questions of test
 
