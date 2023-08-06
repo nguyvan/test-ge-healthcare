@@ -121,7 +121,7 @@ export class Time implements TimeI {
     public setDate(date: Date): void {
         const nowStr: string = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: this.format === FORMAT.LOCAL });
         const [hour, minute, second]: number[] = nowStr.split(':').map((value) => parseInt(value));
-        this.hour = hour;
+        this.hour = hour === 24? 0: hour;
         this.minute = minute;
         this.second = second;
         if (this.format === FORMAT.LOCAL) {
@@ -155,7 +155,7 @@ export class Time implements TimeI {
         const now = new Date();
         const nowStr: string = now.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: this.format === FORMAT.LOCAL, timeZone: this.timeZone });
         const [hour, minute, second]: number[] = nowStr.split(':').map((value) => parseInt(value));
-        this.hour = hour;
+        this.hour = hour === 24? 0: hour;
         this.minute = minute;
         this.second = second;
         this.format = FORMAT.GLOBAL;
