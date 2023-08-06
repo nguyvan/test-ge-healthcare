@@ -206,6 +206,11 @@ export class Watch implements WatchI {
 
     }
 
+    /**
+     * Blink the hour digit in interface.
+     * 
+     * When mode is clicked one time
+     */
     public blinkHour() {
         this.digits.get('h1').classList.add('blink');
         this.digits.get('h2').classList.add('blink');
@@ -213,6 +218,11 @@ export class Watch implements WatchI {
         this.digits.get('m2').classList.remove('blink');
     };
 
+    /**
+     * Blink the minute digit in interface.
+     * 
+     * When mode is clicked two times
+     */
     public blinkMinute() {
         this.digits.get('m1').classList.add('blink');
         this.digits.get('m2').classList.add('blink');
@@ -220,6 +230,9 @@ export class Watch implements WatchI {
         this.digits.get('h2').classList.remove('blink');
     };
 
+    /**
+     * Unblink all digits of the watch
+     */
     public unBlink() {
         this.digits.get('m1').classList.remove('blink');
         this.digits.get('m2').classList.remove('blink');
@@ -227,6 +240,9 @@ export class Watch implements WatchI {
         this.digits.get('h2').classList.remove('blink');
     };
 
+    /**
+     * Reset the watch
+     */
     public reset() {
         this.mode = MODE_DISPLAY.LIGHT;
         const element = document.getElementById(`watch-${this.index}`);
@@ -234,6 +250,10 @@ export class Watch implements WatchI {
         this.digits.get('displayButton').innerHTML = this.time.format;
     }
 
+    /**
+     * Get the initial position of the watch
+     * @returns The initial coordinate of the watch
+     */
     public getCoordinate(): PointI {
         const element = document.getElementById(`watch-${this.index}`)
         const rect = element.getBoundingClientRect()
@@ -246,6 +266,9 @@ export class Watch implements WatchI {
 
     // for rotation around a point
 
+    /**
+     * Initialize animation for the watch
+     */
     public initAnimation() {
         const element = document.getElementById(`watch-${this.index}`);
         element.style.position = 'absolute',
@@ -254,6 +277,12 @@ export class Watch implements WatchI {
         this.getCoordinate();
     }
 
+    /**
+     * Rotate the watch around a center point with step in rad
+     * @param x - Coordinate X of center
+     * @param y - Coordinate Y of center
+     * @param rad - Rotation step (in rad)
+     */
     public rotate(x: number, y: number, rad: number) {
         const centerPoint = new Point(x, y);
         const vectorPoint = this.point.subtract(centerPoint);
@@ -272,19 +301,29 @@ export class Watch implements WatchI {
         element.style.top = `${this.point.y}px`;
     }
 
+    /**
+     * Rotate the watch around itself
+     */
     public rotateAroundSelf() {
         this.initDeg++;
         const element = document.getElementById(`watch-${this.index}`);
         element.style.transform = `rotate(${this.initDeg%360}deg)`
     }
 
+    /**
+     * Scale the watch
+     * @param x - Scale x
+     * @param y - Scale y
+     */
     public scale(x: number, y: number) {
         this.initScale = this.initScale.add(new Point(x, y)).toPoint();
         
         const element = document.getElementById(`watch-${this.index}`);
         element.style.transform = `scale(${this.initScale.x}, ${this.initScale.y})`;
     }
-
+    /**
+     * Start the rotation around self for the watch
+     */
     public startRotateAroundSelf() {
         const that = this;
         this.timerAnimationRotateAroundSelf = setInterval(() => {
@@ -292,6 +331,9 @@ export class Watch implements WatchI {
         }, 500)
     }
 
+    /** 
+     * Start the rotation around the bouding screen for the watch
+     */
     public startRotate() {
         const that = this;
         const element = document.getElementById(`watch-${this.index}`)
@@ -304,6 +346,9 @@ export class Watch implements WatchI {
         }, 500)
     }
 
+    /**
+     * Reset all animation. Stop all animation and make the watch return to its initial position
+     */
     public resetAnimation() {
         clearInterval(this.timerAnimationRotate);
         clearInterval(this.timerAnimationRotateAroundSelf);
